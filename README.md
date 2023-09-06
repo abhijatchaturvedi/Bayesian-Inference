@@ -46,4 +46,4 @@ For the above problem the output is
 This implies P(N1=TRUE) = 0.2, and P(N1 =FALSE) = 0.8.  
 Similarly P(N2 =TRUE) = 0.4, and P(N2 =FALSE)= 0.6.  
 Further, P(N3=TRUE|N1 =TRUE, N2 =TRUE) = 0.2, P(N3 =TRUE|N1 =TRUE, N2 =FALSE) = 0.4,  
-P(N3=TRUE|N1 =FALSE, N2 =TRUE) = 0.3 and so on.  
+P(N3=TRUE|N1 =FALSE, N2 =TRUE) = 0.3 and so on.
