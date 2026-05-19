@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local input/output files
+input.txt
+output.txt
+*.log

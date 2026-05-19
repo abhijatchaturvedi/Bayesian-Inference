@@ -1,49 +1,120 @@
-# Bayesian-Inference
+# Bayesian Network Parameter Estimation
 
-# Objective: 
-Bayesian inference on the given data.
-# Problem: 
-Bayesian network is a directed acyclic graphical representation of a set of variables
-and their conditional dependencies. Each variable is represented as a node in the graph and a
-directed edge between the nodes represents the parent-child relationship between the
-considered nodes. In this assignment we will estimate probability distributions or parameters of
-a given network. For this, we will make use of a dataset containing samples of values observed
-for different variables.
-# Input
-• Line 1: n : no. of variable or nodes (N1 , N2 , ...., Nn )
-• Line 2 to Line n + 1: Comma separated list of all possible values of variables N1 to Nn
-• Line n + 2 to Line 2n + 1: n × n matrix of 1’s and 0’s representing conditional dependencies,
-e.g. a value 1 at location (3,2) shows that N2 is conditionally dependent on N3
-• Line 2n + 2: m : no. of samples
-• Line 2n + 3 to Line 2n + 2 + m: Comma separated values observed for all variables (N1 , N2 ,
-...., Nn ) for each sample.
-# Sample input:
-3  
-TRUE, FALSE  
-TRUE, FALSE  
-TRUE, FALSE  
-0 0 1  
-0 0 1  
-0 0 0  
-100  
-TRUE, FALSE, TRUE  
-FALSE, TRUE, FALSE  
+Command-line implementation for learning Bayesian network parameters from fully observed categorical data.
 
-# Instructions
-There are three binary variables (N1 , N2 , N3 ) in this Bayesian network where N3 is
-conditionally dependent on N1 and N2 . In other words, N1 and N2 are the parents of N3.
-# Output
-Your program should learn the parameters (probability distributions of each variable) of the
-given network and return them in the following format:
-# Output format:
-Print n lines where Line 1 will contain probability distribution of variable N1, Line
-2 will contain probability distribution of variable N2 and so on. Round off the probability value
-upto 4 decimal places.
-For the above problem the output is  
-0.2 0.8  
-0.4 0.6  
-0.2 0.4 0.3 0.5 0.8 0.6 0.7 0.5  
-This implies P(N1=TRUE) = 0.2, and P(N1 =FALSE) = 0.8.  
-Similarly P(N2 =TRUE) = 0.4, and P(N2 =FALSE)= 0.6.  
-Further, P(N3=TRUE|N1 =TRUE, N2 =TRUE) = 0.2, P(N3 =TRUE|N1 =TRUE, N2 =FALSE) = 0.4,  
-P(N3=TRUE|N1 =FALSE, N2 =TRUE) = 0.3 and so on.
+The project estimates marginal and conditional probability tables for a directed acyclic graphical model. Given variable domains, a dependency matrix, and observed samples, it computes maximum-likelihood probability estimates for each node in the network.
+
+## Overview
+
+The program accepts a Bayesian network structure and training samples through standard input, then prints one probability table per variable.
+
+It supports:
+
+- categorical variables with arbitrary string labels
+- parent-child dependencies represented as an adjacency matrix
+- marginal distributions for root nodes
+- conditional probability tables for dependent nodes
+- deterministic 4-decimal output formatting
+
+## Repository Structure
+
+```text
+.
+├── bayesian_network_parameter_estimation.py
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+## Method
+
+For each variable, the estimator identifies its parent nodes from the dependency matrix.
+
+Root node probabilities are estimated as:
+
+```text
+P(X = x) = count(X = x) / total_samples
+```
+
+Dependent node probabilities are estimated as:
+
+```text
+P(X = x | Parents = p) = count(X = x and Parents = p) / count(Parents = p)
+```
+
+The implementation uses maximum-likelihood estimation over complete observations. If a parent configuration is not present in the sample set, the corresponding probability is reported as `0.0000`.
+
+## Input Format
+
+```text
+n
+domain_of_N1
+domain_of_N2
+...
+domain_of_Nn
+n x n dependency matrix
+m
+sample_1
+sample_2
+...
+sample_m
+```
+
+Where:
+
+- `n` is the number of variables.
+- Each domain line contains comma-separated values for one variable.
+- The dependency matrix uses `1` to indicate a directed dependency from row variable to column variable.
+- `m` is the number of observed samples.
+- Each sample contains comma-separated values for all variables in order.
+
+## Example
+
+Input:
+
+```text
+3
+TRUE, FALSE
+TRUE, FALSE
+TRUE, FALSE
+0 0 1
+0 0 1
+0 0 0
+4
+TRUE, TRUE, TRUE
+TRUE, FALSE, FALSE
+FALSE, TRUE, TRUE
+FALSE, FALSE, FALSE
+```
+
+Run:
+
+```bash
+python bayesian_network_parameter_estimation.py < input.txt
+```
+
+Output:
+
+```text
+0.5000 0.5000
+0.5000 0.5000
+1.0000 0.0000 1.0000 0.0000 0.0000 1.0000 0.0000 1.0000
+```
+
+## Output Format
+
+The program prints `n` lines. Each line contains the learned probability values for the corresponding variable.
+
+For variables with parents, probabilities are emitted by iterating over each value in the variable domain, then over every parent-value configuration in domain order.
+
+## Requirements
+
+The implementation uses only the Python standard library.
+
+Recommended runtime:
+
+```text
+Python 3.9+
+```
+
+No third-party packages are required. A `requirements.txt` file is included for environment setup workflows that expect one.
